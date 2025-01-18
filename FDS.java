@@ -2,22 +2,28 @@ import java.util.ArrayList;
 import java.util.Scanner;
 public class FDS {
     public static void main(String[]args){
-        DeliverySystem ds1 = new DeliverySystem();
-        ds1.start();
+        try{
+            DeliverySystem ds1 = new DeliverySystem();
+            ds1.start();
+        }catch(Exception e){
+            System.out.println("An Error Occured!\n"+e);
+        }
     }
 }
 class DeliverySystem{
     Scanner inputString = new Scanner(System.in);
     Scanner inputInt = new Scanner(System.in);
     public ArrayList<Users> userList;
+    public ArrayList<Stores> storeList;
     public ArrayList<MenuItems> itemList;
     public ArrayList<Orders> orderList;
     public ArrayList<Customer>customerList;
     public DeliverySystem(){
-        this.userList = new ArrayList<Users>();
-        this.itemList = new ArrayList<MenuItems>();
-        this.orderList = new ArrayList<Orders>();
-        this.customerList = new ArrayList<Customer>();
+        this.userList = new ArrayList<>();
+        this.storeList = new ArrayList<>();
+        this.itemList = new ArrayList<>();
+        this.orderList = new ArrayList<>();
+        this.customerList = new ArrayList<>();
     }
     public void getUserList(){
         for(Users user: userList){
@@ -31,9 +37,28 @@ class DeliverySystem{
         itemList.remove(item);
     }
     public void viewMenuItems(){
-        System.out.println("Available Items:\t\tPrice: \t\t\tStock:");
-        for(MenuItems item:itemList){
-            System.out.println(item.getfoodName()+"\t\t\t"+item.getfoodPrice()+"\t\t\t"+item.getfoodStock());
+        System.out.println("\nAvailable Stores: ");
+        for(Stores store:storeList){
+            System.out.println((storeList.indexOf(store)+1)+". "+store.getStoreName());
+        }
+        System.out.print("From which store do you want to buy?: ");
+        int choice = inputInt.nextInt();
+        if(choice == 1){
+            System.out.println("\nAvailable Products in Lolo Claros' Store: ");
+            for(MenuItems item:itemList){
+                if(item.getStoreName().equals("Lolo Claros")){
+                    System.out.println(item.getfoodName()+"\t\t\t"+item.getfoodPrice()+"\t\t\t"+item.getfoodStock());
+                }
+            }
+        }else if(choice == 2){
+            System.out.println("\nAvailable Products in Chef John's Garden Cafe: ");
+            for(MenuItems item:itemList){
+                if(item.getStoreName().equals("Chef John's Garden Cafe")){
+                    System.out.println(item.getfoodName()+"\t\t\t"+item.getfoodPrice()+"\t\t\t"+item.getfoodStock());
+                }
+            }
+        }else{
+            System.out.println("Please choose 1 or 2 only!");
         }
     }
     public void addCustomer(Customer customer){
@@ -41,6 +66,12 @@ class DeliverySystem{
     }
     public void removeCustomer(Customer customer){
         customerList.remove(customer);
+    }
+    public void addStore(Stores store){
+        storeList.add(store);
+    }
+    public void removeStore(Stores store){
+        storeList.remove(store);
     }
     public void trackDelivery(){
         if(customerList.isEmpty()){
@@ -146,8 +177,6 @@ class DeliverySystem{
                     if(order.getOrderName().equals(menu.getfoodName())){
                         System.out.println(order.getOrderName()+"\t\t\t"+order.getOrderQty()+"\t\t\t"+menu.getfoodPrice()+"\t\t\t"+(order.getOrderQty()*menu.getfoodPrice()));
                         totalAmount += order.getOrderQty()*menu.getfoodPrice();
-                    }else{
-                        continue;
                     }
                 }
                 
@@ -178,8 +207,6 @@ class DeliverySystem{
                 int newStock = item.getfoodStock() - o1.getOrderQty();
                 item.setFoodStock(newStock);
                 break;
-            }else{
-                continue;
             }
         }
         if(isItemFound){
@@ -211,6 +238,15 @@ class DeliverySystem{
             int choice = inputInt.nextInt();
             if(choice == 1){
                 boolean isAccExists = false;
+                while (true) { 
+                    System.out.print("Enter your Email: ");
+                    String email = inputString.nextLine();
+                    if(!email.contains("@")||!email.contains(".com")){
+                        System.out.println("Please enter a valid email address!");
+                    }else{
+                        break;
+                    }
+                }
                 System.out.print("Enter your Username: ");
                 String userName = inputString.nextLine();
                 System.out.print("Please Provide a Password: ");
@@ -247,9 +283,6 @@ class DeliverySystem{
                         isPasswordMismatch = true;
                         break;
                     }
-                    else{
-                        continue;
-                    }
                 }
                 if(isAccountFound){
                     welcome();
@@ -277,32 +310,78 @@ class DeliverySystem{
     }
     public void welcome(){
         DeliverySystem ds1 = new DeliverySystem();
-        MenuItems m1 = new MenuItems("Indang's Tocino",199.00,25);
-        MenuItems m2 = new MenuItems("Kalamay Buna",75.00,35);
-        MenuItems m3 = new MenuItems("Kapeng Barako",150.00,10);
+        String sn1 = "Lolo Claros";
+        String sn2 = "Chef John's Garden Cafe";
+        MenuItems m1 = new MenuItems(sn2,"Beef Brocolli",460.00,25);
+        MenuItems m2 = new MenuItems(sn2,"Chicken Wings",330.00,35);
+        MenuItems m3 = new MenuItems(sn2,"SnS Fillet",390.00,15);
+        MenuItems m4 = new MenuItems(sn2,"Beef Caldereta",450.00,15);
+        MenuItems m5 = new MenuItems(sn2,"Fry Eggplant",380.00,15);
+        MenuItems m6 = new MenuItems(sn2,"Prawn Tempura",490.00,25);
+        MenuItems m7 = new MenuItems(sn2,"Chopsuey",390.00,35);
+        MenuItems m8 = new MenuItems(sn2,"Roasted Beef",420.00,25);
+        MenuItems m9 = new MenuItems(sn2,"Grilled Salmon",670.00,10);
+        MenuItems m10 = new MenuItems(sn2,"Ribs n Fish",680.00,10);
+        MenuItems m11 = new MenuItems(sn2,"Chocolate Cake",350.00,35);
+        MenuItems m12 = new MenuItems(sn1,"Selecta Meal",250.00,100);
+        MenuItems m13 = new MenuItems(sn1,"Whole Chicken",490.00,25);
+        MenuItems m14 = new MenuItems(sn1,"Bihon Regular",350.00,25);
+        MenuItems m15 = new MenuItems(sn1,"Pancit Canton",220.00,35);
+        MenuItems m16 = new MenuItems(sn1,"Lumpia Shanghai",220.00,25);
+        MenuItems m17 = new MenuItems(sn1,"Lumpia Ubod",490.00,25);
+        MenuItems m18 = new MenuItems(sn1,"Calamares",250.00,25);
         ds1.addMenuItem(m1);
         ds1.addMenuItem(m2);
         ds1.addMenuItem(m3);
-        while(true){
+        ds1.addMenuItem(m4);
+        ds1.addMenuItem(m5);
+        ds1.addMenuItem(m6);
+        ds1.addMenuItem(m7);
+        ds1.addMenuItem(m8);
+        ds1.addMenuItem(m9);
+        ds1.addMenuItem(m10);
+        ds1.addMenuItem(m11);
+        ds1.addMenuItem(m12);
+        ds1.addMenuItem(m13);
+        ds1.addMenuItem(m14);
+        ds1.addMenuItem(m15);
+        ds1.addMenuItem(m16);
+        ds1.addMenuItem(m17);
+        ds1.addMenuItem(m18);
+        Stores lc = new Stores("Lolo Claros");
+        Stores cj = new Stores("Chef John's Garden Cafe");
+        ds1.addStore(lc);
+        ds1.addStore(cj);
+
+        OUTER:
+        while (true) {
             System.out.println("\nWelcome to Delivery System! What do you want to do?");
-            System.out.println("1. View Available Products\n2. Buy Food\n3. Check Orders\n4. Proceed to Checkout\n5. Track my Delivery\n6. Exit");
+            System.out.println("1. View Available Stores\n2. Buy Food\n3. Check Orders\n4. Proceed to Checkout\n5. Track my Delivery\n6. Switch User");
             int choice = inputInt.nextInt();
-            if(choice == 1){
-                ds1.viewMenuItems();
-            }else if(choice == 2){
-                ds1.buyFood();
-            }else if(choice == 3){
-                ds1.checkOrder();
-            }else if(choice == 4){
-                ds1.proceedCheckOut();
-            }else if(choice == 5){
-                ds1.trackDelivery();
-            }else if(choice == 6){
-                System.out.println("Thanks for using our Food Delivery System!");
-                break;
-            }else{
-                System.out.println("Please input only 1-6!");
-                start();
+            switch (choice) {
+                case 1:
+                    ds1.viewMenuItems();
+                    break;
+                case 2:
+                    ds1.buyFood();
+                    break;
+                case 3:
+                    ds1.checkOrder();
+                    break;
+                case 4:
+                    ds1.proceedCheckOut();
+                    break;
+                case 5:
+                    ds1.trackDelivery();
+                    break;
+                case 6:
+                    System.out.println("Thanks for using our Food Delivery System!");
+                    start();
+                    break OUTER;
+                default:
+                    System.out.println("Please input only 1-6!");
+                    start();
+                    break;
             }
         }
     }
@@ -311,13 +390,18 @@ class MenuItems{
     private String foodName;
     private double foodPrice;
     private int foodStock;
-    public MenuItems(String foodName, double foodPrice, int foodStock){
+    private String storeName;
+    public MenuItems(String storeName, String foodName, double foodPrice, int foodStock){
+        this.storeName = storeName;
         this.foodName = foodName;
         this.foodPrice = foodPrice;
         this.foodStock = foodStock;
     }
     public String getfoodName(){
         return foodName;
+    }
+    public String getStoreName(){
+        return storeName;
     }
     public double getfoodPrice(){
         return foodPrice;
@@ -329,8 +413,31 @@ class MenuItems{
         this.foodStock = newStock;
     }
 }
+class Stores{
+    private String storeName;
+    private ArrayList<MenuItems> storeItems;
+    public Stores(String storeName){
+        this.storeName = storeName;
+    }
+    public String getStoreName(){
+        return storeName;
+    }
+    public void addStoreItem(MenuItems item){
+        storeItems.add(item);
+    }
+    public void removeStoreItem(MenuItems item){
+        storeItems.remove(item);
+    }
+    public void viewStoreMenu(){
+        System.out.println(storeName + "\nAvailable Items:\t\tPrice: \t\t\tStock:");
+        for(MenuItems item:storeItems){
+            System.out.println(item.getfoodName()+"\t\t\t"+item.getfoodPrice()+"\t\t\t"+item.getfoodStock());
+        }
+    }
+}
 class Users {
     private String userName;
+    private String userRole;
     private String password;
     public Users(String userName, String password){
         this.userName = userName;
@@ -342,6 +449,9 @@ class Users {
     }
     public String getPassword(){
         return password;
+    }
+    public String getUserRole(){
+        return userRole;
     }
 }
 class Orders{
@@ -366,7 +476,7 @@ class Customer{
     private String customerBankAccountNumber;
     private String customerBankCVV;
     private String customerNameOnCard;
-    private String paymentMethod;
+    private final String paymentMethod;
     public Customer(int customerHouseNo, String customerAddress, String customerPhoneNumber){
         this.customerHouseNo = customerHouseNo;
         this.customerAddress = customerAddress;
