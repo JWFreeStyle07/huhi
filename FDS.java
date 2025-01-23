@@ -247,24 +247,32 @@ class DeliverySystem{
                         break;
                     }
                 }
-                System.out.print("Enter your Username: ");
+                System.out.print("Enter your First Name and Last Name (User Name): ");
                 String userName = inputString.nextLine();
-                System.out.print("Please Provide a Password: ");
-                String password = inputString.nextLine();
-                for(Users user: userList){
-                    if(user.getUserName().equals(userName) && user.getPassword().equals(password)){
-                        isAccExists = true;
-                    }else{
-                        break;
+                while(true){
+                    System.out.print("Please Provide a Password: ");
+                    String password = inputString.nextLine();
+                    for(Users user: userList){
+                        if(user.getUserName().equals(userName) && user.getPassword().equals(password)){
+                            isAccExists = true;
+                        }else{
+                            break;
+                        }
                     }
-                }
-                if(isAccExists){
-                    System.out.println("Another account with username "+userName+" exists! Use another userName and password!");
-                    start();
-                }else{
-                    Users u1 = new Users(userName, password);
-                    userList.add(u1);
-                    start();
+                    System.out.print("Please Confirm Password: ");
+                    String confirm = inputString.nextLine();
+                    if(isAccExists){
+                        System.out.println("Another account with username "+userName+" exists! Use another userName and password!");
+                        start();
+                    }else{
+                        if(!confirm.equals(password)){
+                            System.out.println("Passwords and Confirm Password does not match!");
+                            start();
+                        }
+                        Users u1 = new Users(userName, password);
+                        userList.add(u1);
+                        start();
+                    }
                 }
             }else if(choice == 2){
                 boolean isAccountFound = false;
@@ -437,7 +445,6 @@ class Stores{
 }
 class Users {
     private String userName;
-    private String userRole;
     private String password;
     public Users(String userName, String password){
         this.userName = userName;
@@ -449,9 +456,6 @@ class Users {
     }
     public String getPassword(){
         return password;
-    }
-    public String getUserRole(){
-        return userRole;
     }
 }
 class Orders{
@@ -468,7 +472,6 @@ class Orders{
         return orderQty;
     }
 }
-
 class Customer{
     private int customerHouseNo;
     private String customerAddress;
